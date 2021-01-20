@@ -62,13 +62,7 @@ public class StockResource {
 	@PutMapping(path = "/{id}")
 	public ResponseEntity<Void> update(@Valid @RequestBody Stock stock, @PathVariable Long id) {
 		
-		stockService.findById(id);
-		
-		if (stock.getId() != id) {
-			stock.setId(id);
-		}
-		
-		stockService.update(stock);
+		stockService.update(stock, id);
 		
 		return ResponseEntity.noContent().build();
 	}

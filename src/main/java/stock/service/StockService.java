@@ -48,7 +48,13 @@ public class StockService {
 		
 	}
 	
-	public Stock update(Stock stock) {
+	public Stock update(Stock stock, Long id) {
+		
+		findById(id);
+		
+		if (stock.getId() != id) {
+			stock.setId(id);
+		}		
 		
 		return stockRepo.save(stock);
 		
@@ -56,7 +62,10 @@ public class StockService {
 	
 	public void deleteById(Long id) {
 		
+		findById(id);
+		
 		stockRepo.deleteById(id);
 		
 	}
 }
+

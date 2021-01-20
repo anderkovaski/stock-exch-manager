@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 
+import org.hibernate.validator.constraints.Length;
+
 @Entity
 public class Stock implements Serializable {
 	
@@ -19,11 +21,13 @@ public class Stock implements Serializable {
 	private Long id;
 	
 	@Column(length = 6)
-	@NotEmpty
+	@NotEmpty(message = "Required field")
+	@Length(min = 1, max = 6, message = "Allowed between 1 and 6 characters")
 	private String description;
 	
-	@NotEmpty
 	@Column(length = 100)
+	@NotEmpty(message = "Required field")
+	@Length(min = 1, max = 100, message = "Allowed between 1 and 100 characters")
 	private String longDescription;
 	
 	public Stock() {
