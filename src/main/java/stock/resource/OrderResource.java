@@ -18,60 +18,59 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import stock.domain.Stock;
-import stock.service.StockService;
+import stock.domain.Order;
+import stock.service.OrderService;
 
 @RestController
-@RequestMapping(path = "/stocks")
-public class StockResource {
+@RequestMapping(path = "/orders")
+public class OrderResource {
 	
 	@Autowired
-	private StockService stockService;
+	private OrderService orderService;
 	
-	@GetMapping(path = "/page")
-	public ResponseEntity<Page<Stock>> findPage(
+	@GetMapping(path = "/")
+	public ResponseEntity<Page<Order>> findPage(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
 			@RequestParam(value = "direction", defaultValue = "ASC") String direction,
-			@RequestParam(value = "orderBy", defaultValue = "description") String orderBy) {
+			@RequestParam(value = "orderBy", defaultValue = "runOn") String orderBy) {
 		
-		Page<Stock> stockPage = stockService.findPage(page, linesPerPage, orderBy, direction);
+		Page<Order> orderPage = orderService.findPage(page, linesPerPage, orderBy, direction);
 		
-		return ResponseEntity.ok().body(stockPage);
+		return ResponseEntity.ok().body(orderPage);
 	}
 	
 	@GetMapping(path = "/{id}")
-	public ResponseEntity<Stock> findById(@PathVariable Long id) {
+	public ResponseEntity<Order> findById(@PathVariable Long id) {
 		
-		Stock stock = stockService.findById(id);
+		Order order = orderService.findById(id);
 		
-		return ResponseEntity.ok().body(stock);
+		return ResponseEntity.ok().body(order);
 	}
 	
 	@PostMapping(path = "/")
-	public ResponseEntity<Void> insert(@Valid @RequestBody Stock stock) {
+	public ResponseEntity<Order> insert(@Valid @RequestBody Order order) {
 		
-		Stock newStock = stockService.insert(stock);
+		Order newOrder = orderService.insert(order);
 		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newStock.getId()).toUri();
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newOrder.getId()).toUri();
 		
 		return ResponseEntity.created(uri).build();
 	}
 	
 	@PutMapping(path = "/{id}")
-	public ResponseEntity<Void> update(@Valid @RequestBody Stock stock, @PathVariable Long id) {
+	public ResponseEntity<Void> update(@Valid @RequestBody Order order, @PathVariable Long id) {
 		
-		stockService.update(stock, id);
+		orderService.update(order);
 		
 		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping(path = "/{id}")
-	public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		
-		stockService.deleteById(id);
+		orderService.delete(id);
 		
 		return ResponseEntity.noContent().build();
 	}
-	
 }

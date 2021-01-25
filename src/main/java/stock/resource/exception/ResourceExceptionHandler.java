@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import stock.exception.ObjectNotFoundException;
+import stock.exception.IllegalArgumentException;
 
 @ControllerAdvice
 public class ResourceExceptionHandler {
@@ -28,6 +29,14 @@ public class ResourceExceptionHandler {
 		StandardError error = new StandardError(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage());
 		
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
-	}	
+	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<StandardError> illegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
+		
+		StandardError error = new StandardError(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage());
+		
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
+	}
 	
 }
