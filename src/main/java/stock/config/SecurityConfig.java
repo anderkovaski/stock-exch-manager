@@ -11,7 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import stock.security.JWTAuthFilter;
+import stock.security.JWTAuthenticationFilter;
 import stock.security.JWTUtil;
 
 @Configuration
@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.antMatchers(PUBLIC_MATCHERS).permitAll()
 			.anyRequest().authenticated();
 		
-		http.addFilter(new JWTAuthFilter(authenticationManager(), jwtUtil));
+		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
 	}
 	
 	@Override
