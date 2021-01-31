@@ -4,13 +4,17 @@ import java.util.Arrays;
 import java.util.GregorianCalendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import stock.domain.Order;
 import stock.domain.Stock;
+import stock.domain.User;
 import stock.domain.enumerator.OrderTypeEnum;
+import stock.domain.enumerator.Profile;
 import stock.repository.OrderRepository;
 import stock.repository.StockRepository;
+import stock.repository.UserRepository;
 
 @Service
 public class DBService {
@@ -21,7 +25,20 @@ public class DBService {
 	@Autowired
 	private OrderRepository orderRepo;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	public void instantiateDatabase() {
+		
+		User u1 = new User(null, "anderkovaski@gmail.com", passwordEncoder.encode("123"));
+		u1.getProfiles().add(Profile.ROLE_ADMIN);
+		
+		User u2 = new User(null, "anderkovaski@live.com", passwordEncoder.encode("456"));
+		
+		userRepository.saveAll(Arrays.asList(u1, u2));
 		
 		Stock s1 = new Stock(null, "GOLL4", "Gol Linhas Aéreas");
 		Stock s2 = new Stock(null, "GOLL4F", "Gol Linhas Aéreas");
