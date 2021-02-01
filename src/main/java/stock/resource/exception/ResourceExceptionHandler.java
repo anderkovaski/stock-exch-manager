@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import stock.exception.ObjectNotFoundException;
+import stock.exception.AuthorizationException;
 import stock.exception.IllegalArgumentException;
 
 @ControllerAdvice
@@ -38,5 +39,13 @@ public class ResourceExceptionHandler {
 		
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
 	}
+	
+	@ExceptionHandler(AuthorizationException.class)
+	public ResponseEntity<StandardError> authorizationException(AuthorizationException e, HttpServletRequest request) {
+		
+		StandardError error = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage());
+		
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+	}	
 	
 }
