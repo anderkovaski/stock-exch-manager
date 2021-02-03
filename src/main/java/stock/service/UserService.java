@@ -93,4 +93,15 @@ public class UserService {
 		}
 	}
 	
+	public User getAuthenticatedUser() {
+		
+		UserDetailsImpl userAuth = authenticated();
+		
+		if (userAuth == null) {
+			throw new AuthorizationException("Access denied");
+		}
+		
+		return userRepository.findByEmail(userAuth.getUsername());
+	}
+	
 }

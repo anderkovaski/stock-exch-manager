@@ -28,7 +28,7 @@ public class StockResource {
 	@Autowired
 	private StockService stockService;
 	
-	@GetMapping(path = "/page")
+	@GetMapping
 	public ResponseEntity<Page<Stock>> findPage(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
@@ -40,15 +40,7 @@ public class StockResource {
 		return ResponseEntity.ok().body(stockPage);
 	}
 	
-	@GetMapping(path = "/{id}")
-	public ResponseEntity<Stock> findById(@PathVariable Long id) {
-		
-		Stock stock = stockService.findById(id);
-		
-		return ResponseEntity.ok().body(stock);
-	}
-	
-	@PostMapping(path = "/")
+	@PostMapping
 	public ResponseEntity<Void> insert(@Valid @RequestBody Stock stock) {
 		
 		Stock newStock = stockService.insert(stock);

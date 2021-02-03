@@ -21,6 +21,9 @@ public class OrderService {
 	@Autowired
 	private OrderRepository orderRepository;
 	
+	@Autowired
+	private UserService userService;
+	
 	public List<Order> findAll() {
 		
 		return orderRepository.findAll();
@@ -31,13 +34,13 @@ public class OrderService {
 		
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		
-		return orderRepository.findAll(pageRequest);
+		return orderRepository.findByUser(userService.getAuthenticatedUser(), pageRequest);
 		
 	}
 	
 	public Order findById(Long id) {
 		
-		Optional<Order> order = orderRepository.findById(id);
+		Optional<Order> order = orderRepository.findByIdAndUser(id, userService.getAuthenticatedUser());
 		
 		return order.orElseThrow(() -> new ObjectNotFoundException("Order not found"));
 	}
@@ -46,6 +49,7 @@ public class OrderService {
 	public Order insert(Order order) {
 		
 		order.setId(null);
+		order.setUser(userService.getAuthenticatedUser());
 		
 		if (order.getType() == OrderTypeEnum.SALE) {
 			

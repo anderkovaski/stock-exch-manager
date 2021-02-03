@@ -14,8 +14,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,29 +33,37 @@ public class Order implements Serializable{
 	private Long id;
 	
 	@Enumerated(EnumType.STRING)
+	@NotNull(message = "Required field")
 	private OrderTypeEnum type;
 	
-	@OneToOne
+	@ManyToOne(fetch = FetchType.EAGER)
+	@NotNull(message = "Required field")
 	private Stock stock;
 	
+	@Digits(integer = 5, fraction = 0)
+	@NotNull(message = "Required field")
 	private Integer amount;
 	
 	private Date createdAt;
-	
+
 	private Date runOn;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnore
+	private User user;
 
 	@ManyToOne(fetch = FetchType.EAGER)	
 	private Order purchaseOrder;	
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "purchaseOrder", fetch = FetchType.LAZY)	
 	private Set<Order> salesOrder = new HashSet<>();
 	
 	public Order( ) {
 		
 	}
 
-	public Order(Long id, OrderTypeEnum type, Stock stock, Integer amount, Date runOn, Order purchaseOrder) {
+	public Order(Long id, OrderTypeEnum type, Stock stock, Integer amount, Date runOn, Order purchaseOrder, User user) {
 		super();
 		this.id = id;
 		this.type = type;
@@ -63,6 +72,7 @@ public class Order implements Serializable{
 		this.createdAt = new Date();
 		this.runOn = runOn;
 		this.purchaseOrder = purchaseOrder;
+		this.user = user;
 	}
 
 	public Long getId() {
@@ -71,7 +81,7 @@ public class Order implements Serializable{
 
 	public void setId(Long id) {
 		this.id = id;
-	}
+	}	
 
 	public OrderTypeEnum getType() {
 		return type;
@@ -87,7 +97,7 @@ public class Order implements Serializable{
 
 	public void setStock(Stock stock) {
 		this.stock = stock;
-	}
+	}	
 
 	public Integer getAmount() {
 		return amount;
@@ -127,6 +137,14 @@ public class Order implements Serializable{
 
 	public void setSalesOrder(Set<Order> salesOrder) {
 		this.salesOrder = salesOrder;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

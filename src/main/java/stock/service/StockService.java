@@ -19,6 +19,9 @@ public class StockService {
 	@Autowired
 	private StockRepository stockRepo;
 	
+	@Autowired 
+	private UserService userService;
+	
 	public List<Stock> findAll() {
 		return stockRepo.findAll();
 	}
@@ -27,13 +30,13 @@ public class StockService {
 		
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		
-		return stockRepo.findAll(pageRequest);
+		return stockRepo.findByUser(userService.getAuthenticatedUser(), pageRequest);
 		
 	}
 	
 	public Stock findById(Long id) {
 		
-		Optional<Stock> stock = stockRepo.findById(id);
+		Optional<Stock> stock = stockRepo.findByIdAndUser(id, userService.getAuthenticatedUser());
 		
 		return stock.orElseThrow(
 				() -> new ObjectNotFoundException("Stock not found"));
@@ -43,6 +46,8 @@ public class StockService {
 	public Stock insert(Stock stock) {
 		
 		stock.setId(null);
+		
+		stock.setUser(userService.getAuthenticatedUser());
 		
 		return stockRepo.save(stock);
 		
@@ -67,5 +72,6 @@ public class StockService {
 		stockRepo.deleteById(id);
 		
 	}
+	
 }
 

@@ -4,12 +4,16 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Stock implements Serializable {
@@ -30,15 +34,20 @@ public class Stock implements Serializable {
 	@Length(min = 1, max = 100, message = "Allowed between 1 and 100 characters")
 	private String longDescription;
 	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnore
+	private User user;
+	
 	public Stock() {
 		
 	}
 
-	public Stock(Long id, @NotEmpty String description, @NotEmpty String longDescription) {
+	public Stock(Long id, String description, String longDescription, User user) {
 		super();
 		this.id = id;
 		this.description = description;
 		this.longDescription = longDescription;
+		this.user = user;
 	}
 
 	public Long getId() {
@@ -63,6 +72,14 @@ public class Stock implements Serializable {
 
 	public void setLongDescription(String longDescription) {
 		this.longDescription = longDescription;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class OrderResource {
 	@Autowired
 	private OrderService orderService;
 	
-	@GetMapping(path = "/")
+	@GetMapping
 	public ResponseEntity<Page<Order>> findPage(
 			@RequestParam(value = "page", defaultValue = "0") Integer page,
 			@RequestParam(value = "linesPerPage", defaultValue = "24") Integer linesPerPage,
@@ -40,15 +40,7 @@ public class OrderResource {
 		return ResponseEntity.ok().body(orderPage);
 	}
 	
-	@GetMapping(path = "/{id}")
-	public ResponseEntity<Order> findById(@PathVariable Long id) {
-		
-		Order order = orderService.findById(id);
-		
-		return ResponseEntity.ok().body(order);
-	}
-	
-	@PostMapping(path = "/")
+	@PostMapping
 	public ResponseEntity<Order> insert(@Valid @RequestBody Order order) {
 		
 		Order newOrder = orderService.insert(order);
