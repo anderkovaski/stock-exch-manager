@@ -29,8 +29,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private JWTUtil jwtUtil;
 	
 	private final static String[] PUBLIC_MATCHERS_POST = {
-			"/users"
+			"/users",
+			"/auth/forgot/**"
 	};
+	
+	private final static String[] PUBLIC_MATCHERS = {
+			"/h2-console/**"
+	};	
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -39,7 +44,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		
 		http.authorizeRequests()
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
-			.anyRequest().authenticated();
+			.antMatchers(PUBLIC_MATCHERS).permitAll()
+			.anyRequest().authenticated()
+			.and().headers().frameOptions().sameOrigin();
 		
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
