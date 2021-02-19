@@ -35,7 +35,8 @@ public class AuthResource {
 		User user = userService.getAuthenticatedUser();		
 		String token = jwtUtil.generateToken(user.getEmail());
 		
-		response.addHeader("Authorization", "Bearer " + token);		
+		response.addHeader("Authorization", "Bearer " + token);
+		response.addHeader("access-control-expose-headers", "Authorization");
 		return ResponseEntity.noContent().build();
 	}
 	
