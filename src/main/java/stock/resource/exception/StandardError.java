@@ -1,25 +1,48 @@
 package stock.resource.exception;
 
 import java.io.Serializable;
-import java.util.Date;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class StandardError implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+	private Long timestamp;
 	private Integer status;
+	private String error;
 	private String message;
-	
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
-	private Date timestamp;
+	private String path;
 
-	public StandardError(Integer status, String message) {
+	public StandardError(Integer status, String error, String message, String path) {
 		super();
+		this.timestamp = System.currentTimeMillis();		
 		this.status = status;
+		this.error = error;
 		this.message = message;
-		this.timestamp = new Date();
+		this.path = path;
+	}
+
+	public Long getTimestamp() {
+		return timestamp;
+	}
+
+	public void setTimestamp(Long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public String getError() {
+		return error;
+	}
+
+	public void setError(String error) {
+		this.error = error;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	public Integer getStatus() {

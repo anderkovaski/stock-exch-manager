@@ -16,36 +16,42 @@ import stock.exception.IllegalArgumentException;
 public class ResourceExceptionHandler {
 
 	@ExceptionHandler(ObjectNotFoundException.class)
-	public ResponseEntity<StandardError> objectNotFoundException(ObjectNotFoundException e, HttpServletRequest request) {
-		
-		StandardError error = new StandardError(HttpStatus.NOT_FOUND.value(), e.getMessage());
-		
+	public ResponseEntity<StandardError> objectNotFoundException(ObjectNotFoundException e,
+			HttpServletRequest request) {
+
+		StandardError error = new StandardError(HttpStatus.NOT_FOUND.value(), "Not found", e.getMessage(),
+				request.getRequestURI());
+
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 	}
-	
-	
+
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<StandardError> methodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
-		
-		StandardError error = new StandardError(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage());
-		
+	public ResponseEntity<StandardError> methodArgumentNotValidException(MethodArgumentNotValidException e,
+			HttpServletRequest request) {
+
+		StandardError error = new StandardError(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Unprocessable entity",
+				e.getMessage(), request.getRequestURI());
+
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
 	}
-	
+
 	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<StandardError> illegalArgumentException(IllegalArgumentException e, HttpServletRequest request) {
-		
-		StandardError error = new StandardError(HttpStatus.UNPROCESSABLE_ENTITY.value(), e.getMessage());
-		
+	public ResponseEntity<StandardError> illegalArgumentException(IllegalArgumentException e,
+			HttpServletRequest request) {
+
+		StandardError error = new StandardError(HttpStatus.UNPROCESSABLE_ENTITY.value(), "Unprocessable entity",
+				e.getMessage(), request.getRequestURI());
+
 		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error);
 	}
-	
+
 	@ExceptionHandler(AuthorizationException.class)
 	public ResponseEntity<StandardError> authorizationException(AuthorizationException e, HttpServletRequest request) {
-		
-		StandardError error = new StandardError(HttpStatus.FORBIDDEN.value(), e.getMessage());
-		
+
+		StandardError error = new StandardError(HttpStatus.FORBIDDEN.value(), "Forbidden", e.getMessage(),
+				request.getRequestURI());
+
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
-	}	
-	
+	}
+
 }
